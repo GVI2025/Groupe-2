@@ -1,3 +1,9 @@
+Augustin HUSSON
+Matheo BULTEZ
+Maxime COULON
+Antoine BOEZ
+
+
 # SimpleWMS
 
 A simple Warehouse Management System (WMS) WebAPI REST application built with FastAPI and SQLAlchemy.
