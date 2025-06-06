@@ -4,11 +4,11 @@ install:
 shell:
 	poetry env activate
 
-migrate:
-	poetry run alembic upgrade head
-
 integration:
 	poetry run alembic revision --autogenerate
+
+migrate:
+	poetry run alembic upgrade head
 
 seed:
 	poetry run python -m app.seed.seed_data
