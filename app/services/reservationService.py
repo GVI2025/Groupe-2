@@ -49,3 +49,11 @@ def create_reservation(db: Session, reservation: ReservationCreate):
 
 def get_reservation_by_id(db: Session, reservation_id: str):
     return db.query(Reservation).filter(Reservation.id == reservation_id).first()
+
+def delete_reservation(db: Session, reservation_id: str):
+    reservation = db.query(Reservation).filter(Reservation.id == reservation_id).first()
+    if reservation:
+        db.delete(reservation)
+        db.commit()
+        return reservation
+    return None
