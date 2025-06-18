@@ -3,6 +3,8 @@ name: Python CI with Poetry
 on:
   pull_request: # Se déclenche à chaque PR, peu importe la branche
     branches: ["*"]
+  push: # Se déclenche à chaque push, sur la branche main et develop
+    branches: ["main", "develop"]
 
 jobs:
   test:
