@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch, ANY
 from app.main import app
-from app.schemas.reservationDto import ReservationCreate
+from app.schemas.reservationDto import ReservationCreate, ReservationDelete
 from app.models.reservationEntity import Reservation as ReservationModel
 from datetime import date, time
 
@@ -22,6 +22,10 @@ mock_reservation_create = ReservationCreate(
     heure=time(9, 0),
     utilisateur="jdupont",
     commentaire="Réunion projet"
+)
+
+mock_reservation_delete = ReservationDelete(
+    salle_id="salle-123"
 )
 
 mock_reservation_model = ReservationModel(
@@ -108,3 +112,26 @@ class TestReservationRouter:
         assert response.status_code == 404
         assert "non trouvée" in response.json()["detail"]
         mock_get_resa.assert_called_once_with(ANY, "introuvable")
+
+    @patch('app.routers.reservationController.reservationService.get_reservation_by_id')
+    @patch('app.routers.reservationController.reservationService.delete_reservation')
+    def test_delete_reservation_success(self, mock_delete_reservation, mock_get_resa):
+        mock_get_resa.return_value = mock_reservation_model
+        mock_delete_reservation.return_value = mock_reservation_model
+
+        response = client.delete("/reservations/resa-123")
+
+        assert response.status_code == 200
+        assert response.json()["id"] == "resa-123"
+        mock_get_resa.assert_called_once_with(ANY, "resa-123")
+        mock_delete_reservation.assert_called_once_with(ANY, "resa-123")
+
+    @patch('app.routers.reservationController.reservationService.get_reservation_by_id')
+    def test_delete_reservation_not_found(self, mock_get_resa):
+        mock_get_resa.return_value = None
+
+        response = client.delete("/reservations/resa-introuvable")
+
+        assert response.status_code == 404
+        assert "non trouvée" in response.json()["detail"]
+        mock_get_resa.assert_called_once_with(ANY, "resa-introuvable")
