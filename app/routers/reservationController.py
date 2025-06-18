@@ -35,3 +35,10 @@ def get_reservation(reservation_id: str, db: Session = Depends(get_db)):
     if not reservation:
         raise HTTPException(status_code=404, detail="Réservation non trouvée")
     return reservation
+
+@router.delete("/{reservation_id}", response_model=ReservationRead)
+def delete_reservation(reservation_id: str, db: Session = Depends(get_db)):
+    reservation = reservationService.get_reservation_by_id(db, reservation_id)
+    if not reservation:
+        raise HTTPException(status_code=404, detail="Réservation non trouvée")
+    return reservationService.delete_reservation(db, reservation_id)

@@ -17,3 +17,6 @@ class ReservationRead(ReservationBase):
 
     class Config:
         orm_mode = True
+
+class ReservationDelete(BaseModel):
+    salle_id: str
