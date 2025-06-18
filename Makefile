@@ -39,14 +39,9 @@ flake8-check:
 	poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=150 --statistics
 
 
-lint-fix:
-	make isort-fix
-	make black-fix
+lint-fix: isort-fix black-fix
 
-lint-check:
-	make isort-check
-	make black-check
-	make flake8-check
+lint-check: isort-check black-check flake8-check
 	
 
 	
