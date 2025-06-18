@@ -1,15 +1,13 @@
-
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
-from alembic import context
-
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import sys
+from logging.config import fileConfig
 
-# Import de la base SQLAlchemy et des modèles
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
 from app.database.database import Base
-import app.models
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Alembic config
 config = context.config
@@ -19,6 +17,7 @@ if config.config_file_name is not None:
 
 # Cible pour autogénération
 target_metadata = Base.metadata
+
 
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
@@ -39,10 +38,7 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
         with context.begin_transaction():
             context.run_migrations()
 

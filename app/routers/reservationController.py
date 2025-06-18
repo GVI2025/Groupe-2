@@ -1,8 +1,10 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
-from app.schemas.reservationDto import ReservationRead, ReservationCreate
+
 from app.database.database import get_db
+from app.schemas.reservationDto import ReservationCreate, ReservationRead
 from app.services import reservationService
 
 router = APIRouter(prefix="/reservations", tags=["Reservations"])
@@ -19,12 +21,12 @@ def create_reservation(reservation: ReservationCreate, db: Session = Depends(get
         db,
         salle_id=reservation.salle_id,
         date=reservation.date,
-        heure=reservation.heure
+        heure=reservation.heure,
     )
     if existing_reservations:
         raise HTTPException(
             status_code=400,
-            detail="Une réservation existe déjà pour cette salle à ce créneau horaire."
+            detail="Une réservation existe déjà pour cette salle à ce créneau horaire.",
         )
     return reservationService.create_reservation(db, reservation)
 
@@ -35,6 +37,7 @@ def get_reservation(reservation_id: str, db: Session = Depends(get_db)):
     if not reservation:
         raise HTTPException(status_code=404, detail="Réservation non trouvée")
     return reservation
+
 
 @router.delete("/{reservation_id}", response_model=ReservationRead)
 def delete_reservation(reservation_id: str, db: Session = Depends(get_db)):

@@ -21,3 +21,32 @@ run:
 
 test:
 	poetry run test
+
+isort-check:
+
+	poetry run isort . --check-only --diff
+
+isort-fix:
+	poetry run isort .
+
+black-check:
+	poetry run black --check .
+
+black-fix:
+	poetry run black .
+
+flake8-check:
+	poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=150 --statistics
+
+
+lint-fix:
+	make isort-fix
+	make black-fix
+
+lint-check:
+	make isort-check
+	make black-check
+	make flake8-check
+	
+
+	

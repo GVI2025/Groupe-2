@@ -1,9 +1,12 @@
 from sqlalchemy.orm import Session
+
 from app.models.salleEntity import Salle as SalleModel
 from app.schemas.salleDto import SalleCreate, SalleUpdate
 
+
 def get_salle(db: Session, salle_id: str):
     return db.query(SalleModel).filter(SalleModel.id == salle_id).first()
+
 
 def list_salles(db, skip=0, limit=100, disponible=None):
     query = db.query(SalleModel)
@@ -11,12 +14,14 @@ def list_salles(db, skip=0, limit=100, disponible=None):
         query = query.filter(SalleModel.disponible == disponible)
     return query.offset(skip).limit(limit).all()
 
+
 def create_salle(db: Session, salle: SalleCreate):
     db_salle = SalleModel(**salle.dict())
     db.add(db_salle)
     db.commit()
     db.refresh(db_salle)
     return db_salle
+
 
 def update_salle(db: Session, salle_id: str, salle_data: SalleUpdate):
     db_salle = get_salle(db, salle_id)
@@ -26,6 +31,7 @@ def update_salle(db: Session, salle_id: str, salle_data: SalleUpdate):
         db.commit()
         db.refresh(db_salle)
     return db_salle
+
 
 def delete_salle(db: Session, salle_id: str):
     db_salle = get_salle(db, salle_id)

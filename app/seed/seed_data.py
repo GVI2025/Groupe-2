@@ -1,8 +1,11 @@
-from app.database.database import SessionLocal
-from app.models.salleEntity import Salle
-from app.models.reservationEntity import Reservation
 from datetime import date, time
+
 from sqlalchemy.exc import IntegrityError
+
+from app.database.database import SessionLocal
+from app.models.reservationEntity import Reservation
+from app.models.salleEntity import Salle
+
 
 def seed():
     db = SessionLocal()
@@ -58,6 +61,7 @@ def seed():
         print("Erreur d'intégrité :", e)
     finally:
         db.close()
+
 
 if __name__ == "__main__":
     seed()
