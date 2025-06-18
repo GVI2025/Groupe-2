@@ -1,14 +1,17 @@
 install:
 	poetry install
 
-shell:
+shell-mac:
 	poetry env activate
 
-migrate:
-	poetry run alembic upgrade head
+shell-linux:
+	poetry shell
 
 integration:
 	poetry run alembic revision --autogenerate
+
+migrate:
+	poetry run alembic upgrade head
 
 seed:
 	poetry run python -m app.seed.seed_data

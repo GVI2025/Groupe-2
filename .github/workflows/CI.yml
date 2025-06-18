@@ -1,0 +1,13 @@
+name: Test GitHub-hosted Runner
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Affiche l'environnement
+        run: |
+          uname -a
+          lscpu
