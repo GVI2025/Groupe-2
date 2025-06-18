@@ -1,0 +1,7 @@
+app.db
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+```__pycache__/
