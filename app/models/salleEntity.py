@@ -1,6 +1,9 @@
-from sqlalchemy import Column, String, Integer, Boolean
 from uuid import uuid4
+
+from sqlalchemy import Boolean, Column, Integer, String
+
 from app.database.database import Base
+
 
 class Salle(Base):
     __tablename__ = "salles"

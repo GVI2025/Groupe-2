@@ -1,6 +1,9 @@
-from sqlalchemy import Column, String, Date, Time, ForeignKey
 from uuid import uuid4
+
+from sqlalchemy import Column, Date, ForeignKey, String, Time
+
 from app.database.database import Base
+
 
 class Reservation(Base):
     __tablename__ = "reservations"

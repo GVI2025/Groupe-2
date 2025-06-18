@@ -11,6 +11,7 @@ app = FastAPI(
 app.include_router(salleController.router)
 app.include_router(reservationController.router)
 
+
 @app.get("/")
 async def root():
     return {"message": "Bienvenue sur l'API de réservation de salles !"}

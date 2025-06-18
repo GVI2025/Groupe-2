@@ -1,7 +1,9 @@
+from datetime import date, datetime, time, timedelta
+
 from sqlalchemy.orm import Session
+
 from app.models.reservationEntity import Reservation
 from app.schemas.reservationDto import ReservationCreate
-from datetime import datetime, timedelta, date, time
 
 
 def list_reservations(db: Session, skip: int = 0, limit: int = 100):
@@ -17,10 +19,11 @@ def get_reservations_in_time_slot(db: Session, salle_id: str, date: date, heure:
     end = start + timedelta(hours=1)
 
     # Récupère toutes les réservations de la salle à cette date
-    reservations = db.query(Reservation).filter(
-        Reservation.salle_id == salle_id,
-        Reservation.date == date
-    ).all()
+    reservations = (
+        db.query(Reservation)
+        .filter(Reservation.salle_id == salle_id, Reservation.date == date)
+        .all()
+    )
 
     # Vérifie si le créneau demandé chevauche une réservation existante
     overlapping = []
@@ -39,7 +42,7 @@ def create_reservation(db: Session, reservation: ReservationCreate):
         date=reservation.date,
         heure=reservation.heure,
         utilisateur=reservation.utilisateur,
-        commentaire=reservation.commentaire
+        commentaire=reservation.commentaire,
     )
     db.add(db_reservation)
     db.commit()
@@ -49,6 +52,7 @@ def create_reservation(db: Session, reservation: ReservationCreate):
 
 def get_reservation_by_id(db: Session, reservation_id: str):
     return db.query(Reservation).filter(Reservation.id == reservation_id).first()
+
 
 def delete_reservation(db: Session, reservation_id: str):
     reservation = db.query(Reservation).filter(Reservation.id == reservation_id).first()
