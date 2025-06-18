@@ -15,6 +15,14 @@ mock_salle_data = {
     "disponible": True
 }
 
+mock_salle_data2 = {
+    "id": "salle-456",
+    "nom": "Salle 2",
+    "capacite": 20,
+    "localisation": "Bâtiment Y",
+    "disponible": False
+}
+
 mock_salle_create = SalleCreate(
     nom="Salle Test",
     capacite=10,
@@ -35,22 +43,15 @@ mock_salle_model = SalleModel(
     disponible=True
 )
 
-mock_salle_list = [
-    SalleModel(
-        id="salle-123",
-        nom="Salle Test",
-        capacite=10,
-        localisation="Bâtiment X",
-        disponible=True
-    ),
-    SalleModel(
-        id="salle-456",
-        nom="Salle 2",
-        capacite=20,
-        localisation="Bâtiment Y",
-        disponible=False
-    )
-]
+mock_salle_model2 = SalleModel(
+    id="salle-456",
+    nom="Salle 2",
+    capacite=20,
+    localisation="Bâtiment Y",
+    disponible=False
+)
+
+mock_salle_list = [mock_salle_model, mock_salle_model2]
 
 
 class TestSalleRouter:
@@ -61,6 +62,26 @@ class TestSalleRouter:
         assert response.status_code == 200
         assert len(response.json()) == 2
         mock_list_salles.assert_called_once()
+
+    @patch('app.routers.salleController.salle_service.list_salles')
+    def test_list_salles_disponible_true(self, mock_list_salles):
+        mock_list_salles.return_value = [mock_salle_model]
+        response = client.get("/salles/?disponible=true")
+        assert response.status_code == 200
+        salles = response.json()
+        assert len(salles) == 1
+        assert salles[0]["disponible"] is True
+        mock_list_salles.assert_called_once_with(ANY, skip=0, limit=100, disponible=True)
+
+    @patch('app.routers.salleController.salle_service.list_salles')
+    def test_list_salles_disponible_false(self, mock_list_salles):
+        mock_list_salles.return_value = [mock_salle_model2]
+        response = client.get("/salles/?disponible=false")
+        assert response.status_code == 200
+        salles = response.json()
+        assert len(salles) == 1
+        assert salles[0]["disponible"] is False
+        mock_list_salles.assert_called_once_with(ANY, skip=0, limit=100, disponible=False)
 
     @patch('app.routers.salleController.salle_service.create_salle')
     def test_create_salle(self, mock_create_salle):
