@@ -1,7 +1,7 @@
 name: Python CI with Poetry
 
 on:
-  pull_request:  # Se déclenche à chaque PR, peu importe la branche
+  pull_request: # Se déclenche à chaque PR, peu importe la branche
     branches: ["*"]
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install Poetry
         run: |
@@ -28,15 +28,19 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install --no-interaction --no-root
-          poetry add --dev flake8 black pytest coverage
+          poetry add --dev flake8 black pytest coverage isort
+
+      - name: Lint with isort
+        run: |
+          poetry run isort . --check-only --diff
+
+      - name: Lint with black
+        run: |
+          poetry run black --check .
 
       - name: Lint with flake8
         run: |
           poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
-
-      #- name: Check formatting with black
-      #  run: |
-      #    poetry run black --check .
 
       - name: Run tests and generate coverage report
         run: |
