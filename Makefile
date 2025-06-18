@@ -1,8 +1,11 @@
 install:
 	poetry install
 
-shell:
+shell-mac:
 	poetry env activate
+
+shell-linux:
+	poetry shell
 
 integration:
 	poetry run alembic revision --autogenerate
